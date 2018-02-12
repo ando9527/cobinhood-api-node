@@ -6,6 +6,7 @@
   "types": "types.d.ts",
   "scripts": {
     "build": "rimraf dist && babel src -d dist",
+    "testauth": "ava test/authenticated.js",
     "test": "ava",
     "cover": "nyc ava",
     "report": "npm run cover && nyc report --reporter=text-lcov | coveralls",

@@ -75,15 +75,15 @@ const publicCall = (path, data, method = 'GET', headers = {}) =>{
  * @param {string} method HTTB VERB, GET by default
  * @returns {object} The api response
  */
-const keyCall = ({ apiKey }) => (path, data, method = 'GET') => {
-  if (!apiKey) {
-    throw new Error('You need to pass an API key to make this call.')
-  }
+// const keyCall = ({ apiSecret }) => (path, data, method = 'GET') => {
+//   if (!apiSecret) {
+//     throw new Error('You need to pass an API secret to make this call.')
+//   }
 
-  return publicCall(path, data, method, {
-    'X-MBX-APIKEY': apiKey,
-  })
-}
+//   return publicCall(path, data, method, {
+//     headers: { 'authorization': apiSecret },
+//   })
+// }
 
 /**
  * Factory method for private calls against the api
@@ -94,45 +94,26 @@ const keyCall = ({ apiKey }) => (path, data, method = 'GET') => {
  * @param {object} headers
  * @returns {object} The api response
  */
-const privateCall = ({ apiKey, apiSecret }) => (
+const privateCall = ({ apiSecret }) => (
   path,
   data = {},
   method = 'GET',
   noData,
   noExtra,
 ) => {
-  if (!apiKey || !apiSecret) {
-    throw new Error('You need to pass an API key and secret to make authenticated calls.')
+  if (!apiSecret) {
+    throw new Error('You need to pass an API secret to make authenticated calls.')
   }
-
-  return (data && data.useServerTime
-    ? publicCall('/v1/system/time').then(r => r.result.time)
-    : Promise.resolve(Date.now())
-  ).then(timestamp => {
-    if (data) {
-      delete data.useServerTime
-    }
-
-    const signature = crypto
-      .createHmac('sha256', apiSecret)
-      .update(makeQueryString({ ...data, timestamp }).substr(1))
-      .digest('hex')
-
-    const newData = noExtra ? data : { ...data, timestamp, signature }
-
-    return sendResult(
-      fetch(
-        `${BASE}${path.includes('/wapi') ? '' : '/api'}${path}${noData
-          ? ''
-          : makeQueryString(newData)}`,
-        {
-          method,
-          headers: { 'X-MBX-APIKEY': apiKey },
-          json: true,
-        },
-      ),
-    )
-  })
+  console.log(`${BASE}${path}${makeQueryString(data)}`);
+  // console.log('method', method);
+  // console.log('headers', headers);
+  return sendResult(
+    fetch(`${BASE}${path}${makeQueryString(data)}`, {
+      method,
+      json: true,
+      headers: { 'authorization': apiSecret },
+    }),
+  )
 }
 
 export const candleFields = [
@@ -202,7 +183,7 @@ const aggTrades = payload =>
 
 export default opts => {
   const pCall = privateCall(opts)
-  const kCall = keyCall(opts)
+  // const kCall = keyCall(opts)
 
   return {
     ping: () => publicCall('/v1/ping').then(() => true),
@@ -216,7 +197,7 @@ export default opts => {
     trades: payload =>
       checkParams('trades', payload, ['symbol']) && publicCall('/v1/market/trades/' + payload.symbol),
     tradesHistory: payload =>
-      checkParams('tradesHitory', payload, ['symbol']) && kCall('/v1/historicalTrades', payload),
+      checkParams('tradesHitory', payload, ['symbol']) && pCall('/v1/trading/trades/', payload),
 
     dailyStats: payload => publicCall('/v1/ticker/24hr', payload),
     prices: () =>
@@ -230,7 +211,7 @@ export default opts => {
 
     order: payload => order(pCall, payload, '/v3/order'),
     orderTest: payload => order(pCall, payload, '/v3/order/test'),
-    getOrder: payload => pCall('/v3/order', payload),
+    getOrder: payload => pCall('/v1/trading/orders/', payload),
     cancelOrder: payload => pCall('/v3/order', payload, 'DELETE'),
 
     openOrders: payload => pCall('/v3/openOrders', payload),

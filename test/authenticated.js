@@ -5,131 +5,117 @@ import Binance from 'index'
 import { checkFields } from './utils'
 
 const client = Binance({
-  apiKey: process.env.API_KEY,
-  apiSecret: process.env.API_SECRET,
+  apiSecret: process.env.COBINHOOD_API_SECRET2,
 })
 
-test.serial('[REST] order', async t => {
-  await client.orderTest({
-    symbol: 'ETHBTC',
-    side: 'BUY',
-    quantity: 1,
-    price: 1,
-  })
+// test.serial('[REST] order', async t => {
+//   await client.orderTest({
+//     symbol: 'ETHBTC',
+//     side: 'BUY',
+//     quantity: 1,
+//     price: 1,
+//   })
 
-  await client.orderTest({
-    symbol: 'ETHBTC',
-    side: 'BUY',
-    quantity: 1,
-    type: 'MARKET',
-  })
+//   await client.orderTest({
+//     symbol: 'ETHBTC',
+//     side: 'BUY',
+//     quantity: 1,
+//     type: 'MARKET',
+//   })
 
-  t.pass()
-})
+//   t.pass()
+// })
 
-test.serial('[REST] allOrders / getOrder', async t => {
-  try {
-    await client.getOrder({ symbol: 'ETHBTC' })
-  } catch (e) {
-    t.is(
-      e.message,
-      "Param 'origClientOrderId' or 'orderId' must be sent, but both were empty/null!",
-    )
-  }
+/**DONE */
+// test.serial('[REST] allOrders / getOrder', async t => {
+//   try {
+//     await client.getOrder({})
+    
+//   } catch (e) {
+//     t.is(
+//       e.message,
+//       "Param 'origClientOrderId' or 'orderId' must be sent, but both were empty/null!",
+//     )
+//   }
+//   t.pass()
+// })
 
-  try {
-    await client.getOrder({ symbol: 'ETHBTC', orderId: 1 })
-  } catch (e) {
-    t.is(e.message, 'Order does not exist.')
-  }
 
-  // Note that this test will fail if you don't have any ENG order in your account ;)
-  const orders = await client.allOrders({
-    symbol: 'ENGETH',
-  })
+  // try {
+  //   await client.getOrder({ symbol: 'ETHBTC', orderId: 1 })
+  // } catch (e) {
+  //   t.is(e.message, 'Order does not exist.')
+  // }
 
-  t.true(Array.isArray(orders))
-  t.truthy(orders.length)
+  // // Note that this test will fail if you don't have any ENG order in your account ;)
+  // const orders = await client.allOrders({
+  //   symbol: 'ENGETH',
+  // })
 
-  const [order] = orders
+  // t.true(Array.isArray(orders))
+  // t.truthy(orders.length)
 
-  checkFields(t, order, ['orderId', 'symbol', 'price', 'type', 'side'])
+  // const [order] = orders
 
-  const res = await client.getOrder({
-    symbol: 'ENGETH',
-    orderId: order.orderId,
-  })
+  // checkFields(t, order, ['orderId', 'symbol', 'price', 'type', 'side'])
 
-  t.truthy(res)
-  checkFields(t, res, ['orderId', 'symbol', 'price', 'type', 'side'])
-})
+  // const res = await client.getOrder({
+  //   symbol: 'ENGETH',
+  //   orderId: order.orderId,
+  // })
 
-test.serial('[REST] getOrder with useServerTime', async t => {
-  const orders = await client.allOrders({
-    symbol: 'ENGETH',
-    useServerTime: true,
-  })
+  // t.truthy(res)
+  // checkFields(t, res, ['orderId', 'symbol', 'price', 'type', 'side'])
+  // })
 
-  t.true(Array.isArray(orders))
-  t.truthy(orders.length)
-})
+// test.serial('[REST] getOrder with useServerTime', async t => {
+//   const orders = await client.allOrders({
+//     symbol: 'ENGETH',
+//     useServerTime: true,
+//   })
 
-test.serial('[REST] openOrders', async t => {
-  const orders = await client.openOrders({
-    symbol: 'ETHBTC',
-  })
+//   t.true(Array.isArray(orders))
+//   t.truthy(orders.length)
+// })
 
-  t.true(Array.isArray(orders))
-})
+// test.serial('[REST] openOrders', async t => {
+//   const orders = await client.openOrders({
+//     symbol: 'ETHBTC',
+//   })
 
-test.serial('[REST] cancelOrder', async t => {
-  try {
-    await client.cancelOrder({ symbol: 'ETHBTC', orderId: 1 })
-  } catch (e) {
-    t.is(e.message, 'UNKNOWN_ORDER')
-  }
-})
+//   t.true(Array.isArray(orders))
+// })
 
-test.serial('[REST] accountInfo', async t => {
-  const account = await client.accountInfo()
-  t.truthy(account)
-  checkFields(t, account, ['makerCommission', 'takerCommission', 'balances'])
-  t.truthy(account.balances.length)
-})
+// test.serial('[REST] cancelOrder', async t => {
+//   try {
+//     await client.cancelOrder({ symbol: 'ETHBTC', orderId: 1 })
+//   } catch (e) {
+//     t.is(e.message, 'UNKNOWN_ORDER')
+//   }
+// })
 
-test.serial('[REST] depositHistory', async t => {
-  const history = await client.depositHistory()
-  t.true(history.success)
-  t.truthy(history.depositList.length)
-})
+// test.serial('[REST] accountInfo', async t => {
+//   const account = await client.accountInfo()
+//   t.truthy(account)
+//   checkFields(t, account, ['makerCommission', 'takerCommission', 'balances'])
+//   t.truthy(account.balances.length)
+// })
 
-test.serial('[REST] withdrawHistory', async t => {
-  const history = await client.withdrawHistory()
-  t.true(history.success)
-  t.is(typeof history.withdrawList.length, 'number')
-})
 
-test.serial('[REST] depositAddress', async t => {
-  const out = await client.depositAddress({ asset: 'NEO' })
-  t.true(out.success)
-  t.is(out.asset, 'NEO')
-  t.truthy(out.address)
-})
 
-test.serial('[REST] myTrades', async t => {
-  const trades = await client.myTrades({ symbol: 'ENGETH' })
-  t.true(Array.isArray(trades))
-  const [trade] = trades
-  checkFields(t, trade, ['id', 'orderId', 'qty', 'commission', 'time'])
-})
+// test.serial('[REST] myTrades', async t => {
+//   const trades = await client.myTrades({ id })
+//   console.log(trades);
+  
+//   t.true(Array.isArray(trades))
+//   const [trade] = trades
+//   // checkFields(t, trade, ['id', 'orderId', 'qty', 'commission', 'time'])
+// })
 
-test.serial('[REST] tradesHistory', async t => {
-  const trades = await client.tradesHistory({ symbol: 'ETHBTC', fromId: 28457 })
-  t.is(trades.length, 500)
-})
+//DONE
+// test.serial('[REST] tradesHistory', async t => {
+//   // const trades = await client.tradesHistory({ symbol: 'ETHBTC', fromId: 28457 })
+//   const trades = await client.tradesHistory({ symbol: 'BDG-ETH', limit: 5 })
+//   t.is(trades.result.trades.length, 5)
+// })
 
-test.serial('[WS] user', async t => {
-  const clean = await client.ws.user()
-  t.truthy(clean)
-  t.true(typeof clean === 'function')
-})
