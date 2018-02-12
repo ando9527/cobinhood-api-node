@@ -111,7 +111,33 @@ const privateCall = ({ apiSecret }) => (
     fetch(`${BASE}${path}${makeQueryString(data)}`, {
       method,
       json: true,
-      headers: { 'authorization': apiSecret },
+      headers: { 'authorization': apiSecret,
+                 "nonce": new Date()*1000000 },
+    }),
+  )
+}
+
+const privateDataCall = ({ apiSecret }) => (
+  path,
+  data = {},
+  method = 'GET',
+  noData,
+  noExtra,
+) => {
+  if (!apiSecret) {
+    throw new Error('You need to pass an API secret to make authenticated calls.')
+  }
+  console.log(`${BASE}${path}`);
+  console.log('method', method);
+  console.log(data)
+  // console.log('headers', headers);
+  return sendResult(
+    fetch(`${BASE}${path}`, {
+      method,
+      json: true,
+      headers: { 'authorization': apiSecret,
+                 "nonce": new Date()*1000000 },
+      data: data,
     }),
   )
 }
@@ -143,15 +169,15 @@ export const candleFields = [
 /**
  * Create a new order wrapper for market order simplicity
  */
-const order = (pCall, payload = {}, url) => {
-  const newPayload =
-    ['LIMIT', 'STOP_LOSS_LIMIT', 'TAKE_PROFIT_LIMIT'].includes(payload.type) || !payload.type
-      ? { timeInForce: 'GTC', ...payload }
-      : payload
+const order = (pDCall, url, payload = {}) => {
+  // const newPayload =
+  //   ['LIMIT', 'STOP_LOSS_LIMIT', 'TAKE_PROFIT_LIMIT'].includes(payload.type) || !payload.type
+  //     ? { timeInForce: 'GTC', ...payload }
+  //     : payload
 
   return (
-    checkParams('order', newPayload, ['symbol', 'side', 'quantity']) &&
-    pCall(url, { type: 'LIMIT', ...newPayload }, 'POST')
+    // checkParams('order', newPayload, ['symbol', 'side', 'quantity']) &&
+    pDCall(url, payload, 'POST')
   )
 }
 
@@ -184,6 +210,7 @@ const book = payload =>
 
 export default opts => {
   const pCall = privateCall(opts)
+  const pDCall = privateDataCall(opts)
   // const kCall = keyCall(opts)
 
   return {
@@ -212,10 +239,10 @@ export default opts => {
     //     r.reduce((out, cur) => ((out[cur.symbol] = cur), out), {}),
     //   ),
 
-    // order: payload => order(pCall, payload, '/v1/trading/orders', payload, 'POST'),
+    order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
     // orderTest: payload => order(pCall, payload, '/v3/order/test'),
     getOrder: payload => pCall('/v1/trading/orders/', payload),
-    // cancelOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'DELETE'),
+    cancelOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'DELETE'),
     // modifyOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'PUT'),
 
     // openOrders: payload => pCall('/v3/openOrders', payload),

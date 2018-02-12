@@ -5,27 +5,27 @@ import Binance from 'index'
 import { checkFields } from './utils'
 
 const client = Binance({
-  apiSecret: process.env.COBINHOOD_API_SECRET2,
+  apiSecret: process.env.COBINHOOD_API_SECRET,
 })
 
-// test.serial('[REST] order', async t => {
-//   await client.order({
-//     trading_pair_id: 'EOS-ETH',
-//     side: 'bid',
-//     type: 'limit',
-//     price: '0.000111',
-//     size: '100'
-//   })
+test.serial('[REST] order', async t => {
+  await client.order({
+    trading_pair_id: 'EOS-ETH',
+    side: 'bid',
+    type: 'limit',
+    price: '0.000111',
+    size: '100'
+  })
 
-//   // await client.orderTest({
-//   //   symbol: 'ETHBTC',
-//   //   side: 'BUY',
-//   //   quantity: 1,
-//   //   type: 'MARKET',
-//   // })
+  // await client.orderTest({
+  //   symbol: 'ETHBTC',
+  //   side: 'BUY',
+  //   quantity: 1,
+  //   type: 'MARKET',
+  // })
 
-//   t.pass()
-// })
+  t.pass()
+})
 
 /**DONE */
 // test.serial('[REST] allOrders / getOrder', async t => {
@@ -89,7 +89,7 @@ const client = Binance({
 
 // test.serial('[REST] cancelOrder', async t => {
 //   try {
-//     let kk = await client.cancelOrder({ order_id: 'eacca07b-7429-49c4-bd37-862246815e88' })
+//     let kk = await client.cancelOrder({ order_id: '777bbb84-f1ad-44df-9bc2-3cc33cd62299' })
 //     console.log(kk);
     
 //   } catch (e) {
