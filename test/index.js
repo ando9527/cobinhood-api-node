@@ -28,27 +28,26 @@ const client = Binance()
 // })
 
 test.serial('[REST] book', async t => {
-//   try {
-//     await client.book()
-//   } catch (e) {
-//     t.is(e.message, 'You need to pass a payload object.')
-//   }
+  try {
+    await client.book()
+  } catch (e) {
+    t.is(e.message, 'You need to pass a payload object.')
+  }
 
-//   try {
-//     await client.book({})
-//   } catch (e) {
-//     t.is(e.message, 'Method book requires symbol parameter.')
-//   }
+  try {
+    await client.book({})
+  } catch (e) {
+    t.is(e.message, 'Method book requires symbol parameter.')
+  }
 
   const book = await client.book({ symbol: 'ETH-USD' })
-  t.truthy(book.success)
-  t.truthy(book.result.orderbook.asks.length)
-  t.truthy(book.result.orderbook.bids.length)
+  t.truthy(book.asks.length)
+  t.truthy(book.bids.length)
 
-  const [bid] = book.result.orderbook.bids
+  const [bid] = book.bids
   t.truthy(typeof bid.price === 'string')
   t.truthy(typeof bid.quantity === 'string')
-  t.truthy(typeof bid.quantity === 'count')
+  t.truthy(typeof bid.count === 'string')
 })
 
 // test.serial('[REST] candles', async t => {

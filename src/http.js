@@ -176,15 +176,15 @@ const order = (pCall, payload = {}, url) => {
 
 /**
  * Zip asks and bids reponse from order book
+ * publicCall(,parames split)
  */
 const book = payload =>
   checkParams('book', payload, ['symbol']) &&
-  publicCall('/v1/depth', payload).then(({ lastUpdateId, asks, bids }) => ({
-    lastUpdateId,
-    asks: asks.map(a => zip(['price', 'quantity'], a)),
-    bids: bids.map(b => zip(['price', 'quantity'], b)),
+  publicCall('/v1/market/orderbooks/'+ payload.symbol).then(({ success, result }) => ({
+    asks: result.orderbook.asks.map(a => zip(['price', 'quantity', 'count'], a)),
+    bids: result.orderbook.bids.map(b => zip(['price', 'quantity', 'count'], b)),
   }))
-
+  
 const aggTrades = payload =>
   checkParams('aggTrades', payload, ['symbol']) &&
   publicCall('/v1/aggTrades', payload).then(trades =>
