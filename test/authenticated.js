@@ -94,12 +94,13 @@ const client = Binance({
 //   }
 // })
 
-// test.serial('[REST] accountInfo', async t => {
-//   const account = await client.accountInfo()
-//   t.truthy(account)
-//   checkFields(t, account, ['makerCommission', 'takerCommission', 'balances'])
-//   t.truthy(account.balances.length)
-// })
+// Done
+test.serial('[REST] accountInfo', async t => {
+  const account = await client.accountInfo({currency:'EOS', limit:10})
+  t.truthy(account)
+  checkFields(t, account.result.ledger[0], ['currency', 'balance', 'timestamp'])
+  t.truthy(account.result.ledger)
+})
 
 
 // DONE
