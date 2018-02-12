@@ -1,0 +1,13 @@
+GET https://api.cobinhood.com/v1/system/time HTTP/1.1
+###
+GET https://api.binance.com/api/v1/time HTTP/1.1
+###
+GET https://api.binance.com/api/v1/exchangeInfo HTTP/1.1
+###
+GET https://api.cobinhood.com/v1/system/info  HTTP/1.1
+###
+GET https://api.binance.com/api/v1/depth?symbol=ETHBTC HTTP/1.1
+###
+GET https://api.cobinhood.com/v1/market/trading_pairs HTTP/1.1
+###
+GET https://api.cobinhood.com/v1/market/orderbooks/ETH-USD HTTP/1.1
