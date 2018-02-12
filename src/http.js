@@ -207,7 +207,7 @@ export default opts => {
   return {
     ping: () => publicCall('/v1/ping').then(() => true),
     time: () => publicCall('/v1/system/time').then(r => r.result.time),
-    exchangeInfo: () => publicCall('/v1/exchangeInfo'),
+    exchangeInfo: () => publicCall('/v1/system/info'),
 
     book,
     aggTrades,

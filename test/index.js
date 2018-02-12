@@ -10,46 +10,46 @@ import { checkFields } from './utils'
 dotenv.load()
 
 const client = Binance()
-
+// none in cobinhood
 // test.serial('[REST] ping', async t => {
 //   t.truthy(await client.ping(), 'A simple ping should work')
 // })
 
 //done
-// test.serial('[REST] time', async t => {
-//   const ts = await client.time()
-//   t.truthy(new Date(ts).getTime() > 0, 'The returned timestamp should be valid')
-// })
+test.serial('[REST] time', async t => {
+  const ts = await client.time()
+  t.truthy(new Date(ts).getTime() > 0, 'The returned timestamp should be valid')
+})
 
 //done
-// test.serial('[REST] exchangeInfo', async t => {
-//   const res = await client.exchangeInfo()
-//   checkFields(t, res, ['success', 'result'])
-// })
+test.serial('[REST] exchangeInfo', async t => {
+  const res = await client.exchangeInfo()
+  checkFields(t, res, ['success', 'result'])
+})
 
 //done
-// test.serial('[REST] book', async t => {
-//   try {
-//     await client.book()
-//   } catch (e) {
-//     t.is(e.message, 'You need to pass a payload object.')
-//   }
+test.serial('[REST] book', async t => {
+  try {
+    await client.book()
+  } catch (e) {
+    t.is(e.message, 'You need to pass a payload object.')
+  }
 
-//   try {
-//     await client.book({})
-//   } catch (e) {
-//     t.is(e.message, 'Method book requires symbol parameter.')
-//   }
+  try {
+    await client.book({})
+  } catch (e) {
+    t.is(e.message, 'Method book requires symbol parameter.')
+  }
 
-//   const book = await client.book({ symbol: 'ETH-USD' })
-//   t.truthy(book.asks.length)
-//   t.truthy(book.bids.length)
+  const book = await client.book({ symbol: 'ETH-USD' })
+  t.truthy(book.asks.length)
+  t.truthy(book.bids.length)
 
-//   const [bid] = book.bids
-//   t.truthy(typeof bid.price === 'string')
-//   t.truthy(typeof bid.quantity === 'string')
-//   t.truthy(typeof bid.count === 'string')
-// })
+  const [bid] = book.bids
+  t.truthy(typeof bid.price === 'string')
+  t.truthy(typeof bid.quantity === 'string')
+  t.truthy(typeof bid.count === 'string')
+})
 
 // none in cobinhood
 // test.serial('[REST] candles', async t => {
@@ -81,11 +81,11 @@ const client = Binance()
 //   t.truthy(trade.aggId)
 // })
 
-//done
-// test.serial('[REST] trades', async t => {
-//   const trades = await client.trades({ symbol: 'ETH-USD' })
-//   t.is(trades.result.trades.length, 50)
-// })
+// done
+test.serial('[REST] trades', async t => {
+  const trades = await client.trades({ symbol: 'ETH-USD' })
+  t.is(trades.result.trades.length, 50)
+})
 
 // none in cobinhood
 // test.serial('[REST] dailyStats', async t => {
@@ -94,12 +94,14 @@ const client = Binance()
 //   checkFields(t, res, ['highPrice', 'lowPrice', 'volume', 'priceChange'])
 // })
 
+// none in cobinhood
 // test.serial('[REST] prices', async t => {
 //   const prices = await client.prices()
 //   t.truthy(prices)
 //   t.truthy(prices.ETHBTC)
 // })
 
+// none in cobinhood
 // test.serial('[REST] allBookTickers', async t => {
 //   const tickers = await client.allBookTickers()
 //   t.truthy(tickers)

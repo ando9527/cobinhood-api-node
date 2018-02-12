@@ -21,3 +21,7 @@ GET https://api.binance.com/api/v1/aggTrades?symbol=ETHBTC HTTP/1.1
 GET https://api.binance.com/api/v1/trades?symbol=ETHBTC HTTP/1.1
 ### trades
 GET https://api.cobinhood.com/v1/market/trades/ETH-USD HTTP/1.1
+### all tickers
+GET https://api.binance.com/api/v1/ticker/allBookTickers HTTP/1.1
+### Get Trading Statistics
+GET https://api.cobinhood.com/v1/market/stats HTTP/1.1
