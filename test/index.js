@@ -27,29 +27,31 @@ const client = Binance()
 //   checkFields(t, res, ['success', 'result'])
 // })
 
-test.serial('[REST] book', async t => {
-  try {
-    await client.book()
-  } catch (e) {
-    t.is(e.message, 'You need to pass a payload object.')
-  }
+//done
+// test.serial('[REST] book', async t => {
+//   try {
+//     await client.book()
+//   } catch (e) {
+//     t.is(e.message, 'You need to pass a payload object.')
+//   }
 
-  try {
-    await client.book({})
-  } catch (e) {
-    t.is(e.message, 'Method book requires symbol parameter.')
-  }
+//   try {
+//     await client.book({})
+//   } catch (e) {
+//     t.is(e.message, 'Method book requires symbol parameter.')
+//   }
 
-  const book = await client.book({ symbol: 'ETH-USD' })
-  t.truthy(book.asks.length)
-  t.truthy(book.bids.length)
+//   const book = await client.book({ symbol: 'ETH-USD' })
+//   t.truthy(book.asks.length)
+//   t.truthy(book.bids.length)
 
-  const [bid] = book.bids
-  t.truthy(typeof bid.price === 'string')
-  t.truthy(typeof bid.quantity === 'string')
-  t.truthy(typeof bid.count === 'string')
-})
+//   const [bid] = book.bids
+//   t.truthy(typeof bid.price === 'string')
+//   t.truthy(typeof bid.quantity === 'string')
+//   t.truthy(typeof bid.count === 'string')
+// })
 
+// none in cobinhood
 // test.serial('[REST] candles', async t => {
 //   try {
 //     await client.candles({})
@@ -64,7 +66,7 @@ test.serial('[REST] book', async t => {
 //   const [candle] = candles
 //   checkFields(t, candle, candleFields)
 // })
-
+    //none in cobinhood
 // test.serial('[REST] aggTrades', async t => {
 //   try {
 //     await client.aggTrades({})
@@ -79,11 +81,13 @@ test.serial('[REST] book', async t => {
 //   t.truthy(trade.aggId)
 // })
 
+//done
 // test.serial('[REST] trades', async t => {
-//   const trades = await client.trades({ symbol: 'ETHBTC' })
-//   t.is(trades.length, 500)
+//   const trades = await client.trades({ symbol: 'ETH-USD' })
+//   t.is(trades.result.trades.length, 50)
 // })
 
+// none in cobinhood
 // test.serial('[REST] dailyStats', async t => {
 //   const res = await client.dailyStats({ symbol: 'ETHBTC' })
 //   t.truthy(res)

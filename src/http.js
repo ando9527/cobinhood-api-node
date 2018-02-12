@@ -214,7 +214,7 @@ export default opts => {
     candles,
 
     trades: payload =>
-      checkParams('trades', payload, ['symbol']) && publicCall('/v1/trades', payload),
+      checkParams('trades', payload, ['symbol']) && publicCall('/v1/market/trades/' + payload.symbol),
     tradesHistory: payload =>
       checkParams('tradesHitory', payload, ['symbol']) && kCall('/v1/historicalTrades', payload),
 
