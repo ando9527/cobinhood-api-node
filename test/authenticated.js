@@ -9,19 +9,20 @@ const client = Binance({
 })
 
 // test.serial('[REST] order', async t => {
-//   await client.orderTest({
-//     symbol: 'ETHBTC',
-//     side: 'BUY',
-//     quantity: 1,
-//     price: 1,
+//   await client.order({
+//     trading_pair_id: 'EOS-ETH',
+//     side: 'bid',
+//     type: 'limit',
+//     price: '0.000111',
+//     size: '100'
 //   })
 
-//   await client.orderTest({
-//     symbol: 'ETHBTC',
-//     side: 'BUY',
-//     quantity: 1,
-//     type: 'MARKET',
-//   })
+//   // await client.orderTest({
+//   //   symbol: 'ETHBTC',
+//   //   side: 'BUY',
+//   //   quantity: 1,
+//   //   type: 'MARKET',
+//   // })
 
 //   t.pass()
 // })
@@ -88,24 +89,38 @@ const client = Binance({
 
 // test.serial('[REST] cancelOrder', async t => {
 //   try {
-//     await client.cancelOrder({ symbol: 'ETHBTC', orderId: 1 })
+//     let kk = await client.cancelOrder({ order_id: 'eacca07b-7429-49c4-bd37-862246815e88' })
+//     console.log(kk);
+    
 //   } catch (e) {
 //     t.is(e.message, 'UNKNOWN_ORDER')
 //   }
+//   t.pass()
+// })
+
+// test.serial('[REST] cancelOrder', async t => {
+//   try {
+//     let kk = await client.modifyOrder({ order_id: 'eacca07b-7429-49c4-bd37-862246815e88' })
+//     console.log(kk);
+    
+//   } catch (e) {
+//     t.is(e.message, 'UNKNOWN_ORDER')
+//   }
+//   t.pass()
 // })
 
 // Done
-test.serial('[REST] accountInfo', async t => {
-  const account = await client.accountInfo({currency:'EOS', limit:10})
-  t.truthy(account)
-  checkFields(t, account.result.ledger[0], ['currency', 'balance', 'timestamp'])
-  t.truthy(account.result.ledger)
-})
+// test.serial('[REST] accountInfo', async t => {
+//   const account = await client.accountInfo({currency:'EOS', limit:10})
+//   t.truthy(account)
+//   checkFields(t, account.result.ledger[0], ['currency', 'balance', 'timestamp'])
+//   t.truthy(account.result.ledger)
+// })
 
 
 // DONE
 // test.serial('[REST] myTrades', async t => {
-//   const trades = await client.myTrades({ id: '1995697c-b7a2-4a66-8b7b-bb610cb36130' })
+//   const trades = await client.myTrades({ trade_id: '1995697c-b7a2-4a66-8b7b-bb610cb36130' })
   
 //   checkFields(t, trades.result.trade, ['ask_order_id', 'bid_order_id', 'id', 'price', 'size'])
 // })
@@ -113,8 +128,7 @@ test.serial('[REST] accountInfo', async t => {
 //DONE
 // test.serial('[REST] tradesHistory', async t => {
 //   // const trades = await client.tradesHistory({ symbol: 'ETHBTC', fromId: 28457 })
-//   const trades = await client.tradesHistory({ symbol: 'BDG-ETH', limit: 5 })
-//   console.log(trades.result.trades[0]);
+//   const trades = await client.tradesHistory({ trading_pair_id: 'BDG-ETH', limit: 5 })
    
 //   t.is(trades.result.trades.length, 5)
 // })
