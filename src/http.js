@@ -218,7 +218,7 @@ export default opts => {
     allOrders: payload => pCall('/v3/allOrders', payload),
 
     accountInfo: payload => pCall('/v3/account', payload),
-    myTrades: payload => pCall('/v3/myTrades', payload),
+    myTrades: payload => pCall('/v1/trading/trades/' + payload.id),
 
     withdraw: payload => pCall('/wapi/v3/withdraw.html', payload, 'POST'),
     withdrawHistory: payload => pCall('/wapi/v3/withdrawHistory.html', payload),

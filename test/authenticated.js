@@ -102,20 +102,19 @@ const client = Binance({
 // })
 
 
-
+// DONE
 // test.serial('[REST] myTrades', async t => {
-//   const trades = await client.myTrades({ id })
-//   console.log(trades);
+//   const trades = await client.myTrades({ id: '1995697c-b7a2-4a66-8b7b-bb610cb36130' })
   
-//   t.true(Array.isArray(trades))
-//   const [trade] = trades
-//   // checkFields(t, trade, ['id', 'orderId', 'qty', 'commission', 'time'])
+//   checkFields(t, trades.result.trade, ['ask_order_id', 'bid_order_id', 'id', 'price', 'size'])
 // })
 
 //DONE
 // test.serial('[REST] tradesHistory', async t => {
 //   // const trades = await client.tradesHistory({ symbol: 'ETHBTC', fromId: 28457 })
 //   const trades = await client.tradesHistory({ symbol: 'BDG-ETH', limit: 5 })
+//   console.log(trades.result.trades[0]);
+   
 //   t.is(trades.result.trades.length, 5)
 // })
 
