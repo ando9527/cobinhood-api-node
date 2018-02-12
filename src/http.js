@@ -134,10 +134,11 @@ const privateDataCall = ({ apiSecret }) => (
   return sendResult(
     fetch(`${BASE}${path}`, {
       method,
+      body: JSON.stringify(data),
       json: true,
       headers: { 'authorization': apiSecret,
                  "nonce": new Date()*1000000 },
-      data: data,
+      
     }),
   )
 }
@@ -171,12 +172,11 @@ export const candleFields = [
  */
 const order = (pDCall, url, payload = {}) => {
   // const newPayload =
-  //   ['LIMIT', 'STOP_LOSS_LIMIT', 'TAKE_PROFIT_LIMIT'].includes(payload.type) || !payload.type
-  //     ? { timeInForce: 'GTC', ...payload }
-  //     : payload
-
+    if (!['MARKET', 'LIMIT', 'STOP', 'STOP_LIMIT', 'TRAILING_STOP, FILL_OR_KILL'].includes(payload.type.toUpperCase())){
+      throw new Error("Order type should be MARKET/LIMIT/STOP/STOP_LIMIT/TRAILING_STOP/FILL_OR_KILL")
+    }
   return (
-    // checkParams('order', newPayload, ['symbol', 'side', 'quantity']) &&
+    checkParams('order', payload, ['trading_pair_id', 'side', 'type', 'price', 'size']) &&
     pDCall(url, payload, 'POST')
   )
 }

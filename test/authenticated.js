@@ -1,31 +1,36 @@
 import test from 'ava'
 
-import Binance from 'index'
+import Cobinhood from 'index'
 
 import { checkFields } from './utils'
 
-const client = Binance({
+const client = Cobinhood({
   apiSecret: process.env.COBINHOOD_API_SECRET,
 })
-
-test.serial('[REST] order', async t => {
-  await client.order({
-    trading_pair_id: 'EOS-ETH',
-    side: 'bid',
-    type: 'limit',
-    price: '0.000111',
-    size: '100'
-  })
-
-  // await client.orderTest({
-  //   symbol: 'ETHBTC',
-  //   side: 'BUY',
-  //   quantity: 1,
-  //   type: 'MARKET',
-  // })
-
-  t.pass()
-})
+//Done
+// test.serial('[REST] order', async t => {
+//   try{
+//     await client.order({
+//       trading_pair_id: 'ETHBTC',
+//       side: 'bid',
+//       quantity: 1,
+//       type: 'FAPFAP',
+//     })
+//   }catch(e){
+//     t.is(
+//       e.message,
+//       "Order type should be MARKET/LIMIT/STOP/STOP_LIMIT/TRAILING_STOP/FILL_OR_KILL",
+//     )
+//   }
+//   await client.order({
+//     trading_pair_id: 'EOS-ETH',
+//     side: 'bid',
+//     type: 'limit',
+//     price: '0.000111',
+//     size: '100'
+//   })
+//   t.pass()
+// })
 
 /**DONE */
 // test.serial('[REST] allOrders / getOrder', async t => {
