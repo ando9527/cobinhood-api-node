@@ -1,6 +1,6 @@
 {
   "name": "cobinhood-api-node",
-  "version": "0.5.5",
+  "version": "0.1.0",
   "description": "A node API wrapper for Cobinhood, inspired by binance-api-node",
   "main": "dist",
   "types": "types.d.ts",

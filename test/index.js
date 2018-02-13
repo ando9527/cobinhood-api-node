@@ -11,7 +11,8 @@ dotenv.load()
 
 const client = Cobinhood()
 
-/**System
+/**
+ * System
  * https://cobinhood.github.io/api-public/#system
  */
 
@@ -25,7 +26,8 @@ test.serial('[REST][System] Get System Information', async t => {
   t.is(res.success, true)
 })
 
-/**Market
+/**
+ * Market
  * https://cobinhood.github.io/api-public/#market
  */
 
