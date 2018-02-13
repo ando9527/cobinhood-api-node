@@ -4,7 +4,7 @@ import zip from 'lodash.zipobject'
 import 'isomorphic-fetch'
 
 const BASE = 'https://api.cobinhood.com'
-
+// const BASE = 'https://sandbox-api.cobinhood.com'
 /**
  * Build query string for uri encoded url based on json object
  */
@@ -170,14 +170,32 @@ export const candleFields = [
 /**
  * Create a new order wrapper for market order simplicity
  */
-const order = (pDCall, url, payload = {}) => {
+const order = (pDCall, url, payload = {}, method) => {
+    checkParams('order', payload, ['trading_pair_id', 'side', 'type', 'price', 'size'])
   // const newPayload =
     if (!['MARKET', 'LIMIT', 'STOP', 'STOP_LIMIT', 'TRAILING_STOP, FILL_OR_KILL'].includes(payload.type.toUpperCase())){
       throw new Error("Order type should be MARKET/LIMIT/STOP/STOP_LIMIT/TRAILING_STOP/FILL_OR_KILL")
     }
   return (
-    checkParams('order', payload, ['trading_pair_id', 'side', 'type', 'price', 'size']) &&
-    pDCall(url, payload, 'POST')
+    pDCall(url, payload, method)
+  )
+}
+
+const removeProperty = (obj, property) => {
+  return  Object.keys(obj).reduce((acc, key) => {
+    if (key !== property) {
+      return {...acc, [key]: obj[key]}
+    }
+    return acc;
+  }, {})
+}
+
+const modifyOrder = (pCall, url, payload = {}, method = 'PUT') => {
+  checkParams('modifyOrder', payload, ['order_id', 'price', 'size'])
+  const newUrl = url + payload.order_id 
+  const newPayload = removeProperty(payload, 'order_id')
+  return (
+    pCall(newUrl, newPayload, method)
   )
 }
 
@@ -240,10 +258,13 @@ export default opts => {
     //   ),
 
     order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
+    modifyOrder: payload => modifyOrder(pCall, '/v1/trading/orders/', payload, 'PUT'),
+    // modifyOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'PUT'),
+
     // orderTest: payload => order(pCall, payload, '/v3/order/test'),
     getOrder: payload => pCall('/v1/trading/orders/', payload),
     cancelOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'DELETE'),
-    // modifyOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'PUT'),
+
 
     // openOrders: payload => pCall('/v3/openOrders', payload),
     // allOrders: payload => pCall('/v3/allOrders', payload),

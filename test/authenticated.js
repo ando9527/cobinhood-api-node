@@ -7,13 +7,15 @@ import { checkFields } from './utils'
 const client = Cobinhood({
   apiSecret: process.env.COBINHOOD_API_SECRET,
 })
-//Done
-// test.serial('[REST] order', async t => {
+// Done
+// test.serial('[REST] order & cancelOrder', async t => {
 //   try{
 //     await client.order({
 //       trading_pair_id: 'ETHBTC',
 //       side: 'bid',
-//       quantity: 1,
+//       price: '0.00011',
+//       size: '1',
+//       quantity: '1'1,
 //       type: 'FAPFAP',
 //     })
 //   }catch(e){
@@ -22,15 +24,40 @@ const client = Cobinhood({
 //       "Order type should be MARKET/LIMIT/STOP/STOP_LIMIT/TRAILING_STOP/FILL_OR_KILL",
 //     )
 //   }
-//   await client.order({
+//   const order = await client.order({
 //     trading_pair_id: 'EOS-ETH',
 //     side: 'bid',
 //     type: 'limit',
 //     price: '0.000111',
 //     size: '100'
 //   })
+//   console.log("Place anorder ", order);
+//   try {
+//     const res = await client.cancelOrder({ order_id: '95493780-01b0-4094-a5db-1704e62c7090' })
+//     t.is(res.success, true)
+    
+//   } catch (e) {
+//     t.is(e.message, 'UNKNOWN_ORDER')
+//   }
+
 //   t.pass()
 // })
+
+// DONE
+// test.serial('[REST] cancelOrder', async t => {
+//   try {
+//     const res = await client.cancelOrder({ order_id: '95493780-01b0-4094-a5db-1704e62c7090' })
+//     t.is(res.success, true)
+    
+//   } catch (e) {
+//     t.is(e.message, 'UNKNOWN_ORDER')
+//   }
+  
+// })
+
+
+
+
 
 /**DONE */
 // test.serial('[REST] allOrders / getOrder', async t => {
@@ -92,21 +119,11 @@ const client = Cobinhood({
 //   t.true(Array.isArray(orders))
 // })
 
-// test.serial('[REST] cancelOrder', async t => {
-//   try {
-//     let kk = await client.cancelOrder({ order_id: '777bbb84-f1ad-44df-9bc2-3cc33cd62299' })
-//     console.log(kk);
-    
-//   } catch (e) {
-//     t.is(e.message, 'UNKNOWN_ORDER')
-//   }
-//   t.pass()
-// })
+
 
 // test.serial('[REST] cancelOrder', async t => {
 //   try {
-//     let kk = await client.modifyOrder({ order_id: 'eacca07b-7429-49c4-bd37-862246815e88' })
-//     console.log(kk);
+//     let kk = await client.modifyOrder({ order_id: '85f03e84-ccf3-4480-ba32-4db37279de11', price:'0.000110', size: '1'})
     
 //   } catch (e) {
 //     t.is(e.message, 'UNKNOWN_ORDER')
