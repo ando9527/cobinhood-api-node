@@ -176,9 +176,22 @@ const removeProperty = (obj, property) => {
 }
 
 /**
+ * Create a new trades wrapper for market order simplicity
+ */
+const trades = (publicCall, url, payload = {}, method) => {
+  checkParams('trades', payload, ['trading_pair_id'])
+  const newUrl = url + payload.trading_pair_id
+  const newPayload =  removeProperty(payload, 'trading_pair_id')
+
+  return (
+    publicCall(newUrl, newPayload, method)
+  )
+}
+
+/**
  * Create a new order books wrapper for market order simplicity
  */
-const orderBooks = (pCall, url, payload = {}, method) => {
+const orderBooks = (publicCall, url, payload = {}, method) => {
   checkParams('orderBooks', payload, ['trading_pair_id'])
   const newUrl = url + payload.trading_pair_id
   const newPayload =  removeProperty(payload, 'trading_pair_id')
@@ -265,18 +278,24 @@ export default opts => {
     allTradingPairs: payload =>
       publicCall('/v1/market/trading_pairs'),
 
-    orderBooks: payload => orderBooks(pCall, '/v1/market/orderbooks/', payload, 'GET'),
+    orderBooks: payload => orderBooks(publicCall, '/v1/market/orderbooks/', payload, 'GET'),
 
     marketState: payload =>
       publicCall('/v1/market/stats'),
     
+    ticker: payload =>
+      checkParams('ticker', payload, ['trading_pair_id']) &&
+      publicCall('/v1/market/tickers/'+ payload.trading_pair_id),  
+
+    trades: payload => trades(publicCall, '/v1/market/orderbooks/', payload, 'GET'),
+      
     book,
     // aggTrades,
     // candles,
 
     //TODO query param
-    trades: payload =>
-      checkParams('trades', payload, ['trading_pair_id']) && publicCall('/v1/market/trades/' + payload.trading_pair_id),
+    // trades: payload =>
+    //   checkParams('trades', payload, ['trading_pair_id']) && publicCall('/v1/market/trades/' + payload.trading_pair_id),
 
     tradesHistory: payload =>
       checkParams('tradesHitory', payload, ['trading_pair_id']) && pCall('/v1/trading/trades/', payload),
