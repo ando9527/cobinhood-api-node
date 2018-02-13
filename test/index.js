@@ -75,8 +75,6 @@ test.serial('[REST][Market] Get Ticker', async t => {
 
 test.serial('[REST][Market] Get Recent Trades', async t => {
     const res = await client.trades({trading_pair_id: 'EOS-ETH', limit: 5})
-    console.log(res);
-    
     checkFields(t, res, ['success', 'result'])
 })
 

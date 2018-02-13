@@ -254,10 +254,16 @@ export default opts => {
 
     myTradeHistory: payload => 
     checkParams('myTradeHistory', payload, ['trading_pair_id']) &&
-    pCall('/v1/trading/trades/',  payload)
+    pCall('/v1/trading/trades/',  payload),
 
-
-    
-    
+    /**
+     * Wallet [Auth]
+     */
+    balances: payload => 
+      pCall('/v1/wallet/balances',  payload),
+ 
+    balanceHistory: payload => 
+      checkParams('balanceHistory', payload, ['currency', 'limit']) &&
+      pCall('/v1/wallet/ledger',  payload)
   }
 }

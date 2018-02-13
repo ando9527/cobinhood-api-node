@@ -1,13 +1,8 @@
-# binance-api-node [![build](https://img.shields.io/travis/HyperCubeProject/binance-api-node.svg?style=flat-square)](https://travis-ci.org/HyperCubeProject/binance-api-node) [![cover](https://img.shields.io/coveralls/HyperCubeProject/binance-api-node.svg?style=flat-square)](https://coveralls.io/github/HyperCubeProject/binance-api-node) [![bnb](https://img.shields.io/badge/binance-winner-yellow.svg?style=flat-square)](https://github.com/binance-exchange/binance-api-node)
-
-> A complete API wrapper for the [Binance](https://binance.com) API.
-
-Note: This wrapper uses Promises, if they are not supported in your environment, you might
-want to add [a polyfill](https://github.com/stefanpenner/es6-promise) for them.
+# binance-api-node 
 
 ### Installation
 
-    yarn add binance-api-node
+    yarn add https://bitbucket.org/uselessmining/cobinhood-api-node
 
 ### Getting started
 
@@ -16,23 +11,22 @@ you don't plan on doing authenticated calls. You can create an api key
 [here](https://www.binance.com/userCenter/createApi.html).
 
 ```js
-import Binance from 'binance-api-node'
+import Cobinhood from 'cobinhood-api-node'
 
-const client = Binance()
+const client = Cobinhood()
 
 // Authenticated client, can make signed calls
-const client2 = Binance({
-  apiKey: 'xxx',
+const client2 = Cobinhood({
   apiSecret: 'xxx',
 })
 
-client.time().then(time => console.log(time))
+client.systemTime().then(time => console.log(time))
 ```
 
 If you do not have an appropriate babel config, you will need to use the basic commonjs requires.
 
 ```js
-const Binance = require('binance-api-node').default
+const Cobinhood = require('cobinhood-api-node').default
 ```
 
 Every REST method returns a Promise, making this library [async await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) ready.
@@ -41,55 +35,35 @@ Following examples will use the `await` form, which requires some configuration 
 ### Table of Contents
 
 - [Public REST Endpoints](#public-rest-endpoints)
-    - [ping](#ping)
-    - [time](#time)
-    - [exchangeInfo](#exchangeinfo)
-    - [book](#book)
-    - [candles](#candles)
-    - [aggTrades](#aggtrades)
-    - [trades](#trades)
-    - [dailyStats](#dailystats)
-    - [prices](#prices)
-    - [allBookTickers](#allbooktickers)
-- [Authenticated REST Endpoints](#authenticated-rest-endpoints)
-    - [order](#order)
-    - [orderTest](#ordertest)
-    - [getOrder](#getorder)
-    - [cancelOrder](#cancelorder)
-    - [openOrders](#openorders)
-    - [allOrders](#allorders)
-    - [accountInfo](#accountinfo)
-    - [myTrades](#mytrades)
-    - [tradesHistory](#tradeshistory)
-    - [depositHistory](#deposithistory)
-    - [withdrawHistory](#withdrawhistory)
-    - [withdraw](#withdraw)
-    - [depositAddress](#depositaddress)
-- [Websockets](#websockets)
-    - [depth](#depth)
-    - [partialDepth](#partialdepth)
+    - [systemTime](#systemTime)
+    - [systemInfo](#systemInfo)
+    - [allCurrencies](#allCurrencies)
+    - [allTradingPairs](#allTradingPairs)
+    - [orderBooks](#orderBooks)
+    - [marketState](#marketState)
     - [ticker](#ticker)
-    - [allTickers](#alltickers)
-    - [candles](#candles-1)
     - [trades](#trades)
-    - [user](#user)
+- [Authenticated REST Endpoints](#authenticated-rest-endpoints)
+    - [myOrderId](#myOrderId)
+    - [myOrderSymbol](#myOrderSymbol)
+    - [order](#order)
+    - [modifyOrder](#modifyOrder)
+    - [cancelOrder](#cancelOrder)
+    - [myTrade](#myTrade)
+    - [myTradeHistory](#myTradeHistory)
+    - [balances](#balances)
+    - [balanceHistory](#balanceHistory)
+
 
 ### Public REST Endpoints
 
-#### ping
 
-Test connectivity to the API.
-
-```js
-console.log(await client.ping())
-```
-
-#### time
+#### systemTime
 
 Test connectivity to the Rest API and get the current server time.
 
 ```js
-console.log(await client.time())
+console.log(await client.systemTime())
 ```
 
 <details>
