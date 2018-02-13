@@ -2,7 +2,6 @@ import crypto from 'crypto'
 import zip from 'lodash.zipobject'
 
 import 'isomorphic-fetch'
-
 const BASE = 'https://api.cobinhood.com'
 // const BASE = 'https://sandbox-api.cobinhood.com'
 /**
@@ -129,7 +128,8 @@ const privateDataCall = ({ apiSecret }) => (
   }
   console.log(`${BASE}${path}`);
   console.log('method', method);
-  console.log(data)
+  console.log(JSON.stringify(data))
+  
   // console.log('headers', headers);
   return sendResult(
     fetch(`${BASE}${path}`, {
@@ -190,12 +190,12 @@ const removeProperty = (obj, property) => {
   }, {})
 }
 
-const modifyOrder = (pCall, url, payload = {}, method = 'PUT') => {
-  checkParams('modifyOrder', payload, ['order_id', 'price', 'size'])
+const modifyOrder = (pDCall, url, payload = {}, method = 'PUT') => {
+  checkParams('modifyOrder', payload, ['order_id', 'trading_pair_id', 'price', 'size'])
   const newUrl = url + payload.order_id 
   const newPayload = removeProperty(payload, 'order_id')
   return (
-    pCall(newUrl, newPayload, method)
+    pDCall(newUrl, newPayload, method)
   )
 }
 
@@ -258,7 +258,7 @@ export default opts => {
     //   ),
 
     order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
-    modifyOrder: payload => modifyOrder(pCall, '/v1/trading/orders/', payload, 'PUT'),
+    modifyOrder: payload => modifyOrder(pDCall, '/v1/trading/orders/', payload, 'PUT'),
     // modifyOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'PUT'),
 
     // orderTest: payload => order(pCall, payload, '/v3/order/test'),

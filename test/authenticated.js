@@ -15,7 +15,7 @@ const client = Cobinhood({
 //       side: 'bid',
 //       price: '0.00011',
 //       size: '1',
-//       quantity: '1'1,
+//       quantity: '1',
 //       type: 'FAPFAP',
 //     })
 //   }catch(e){
@@ -31,10 +31,18 @@ const client = Cobinhood({
 //     price: '0.000111',
 //     size: '100'
 //   })
-//   console.log("Place anorder ", order);
+  
 //   try {
-//     const res = await client.cancelOrder({ order_id: '95493780-01b0-4094-a5db-1704e62c7090' })
-//     t.is(res.success, true)
+//     const modify = await client.modifyOrder({ order_id: order.result.order.id, trading_pair_id: 'EOS-ETH', price:'0.000110', size: '105'})
+//     t.is(modify.success, true)
+
+//   } catch (e) {
+//     t.is(e.message, 'UNKNOWN_ORDER')
+//   }
+
+//   try {
+//     const del = await client.cancelOrder({ order_id: order.result.order.id })
+//     t.is(del.success, true)
     
 //   } catch (e) {
 //     t.is(e.message, 'UNKNOWN_ORDER')
@@ -120,10 +128,10 @@ const client = Cobinhood({
 // })
 
 
-
-// test.serial('[REST] cancelOrder', async t => {
+// DONE
+// test.serial('[REST] modifyOrder', async t => {
 //   try {
-//     let kk = await client.modifyOrder({ order_id: '85f03e84-ccf3-4480-ba32-4db37279de11', price:'0.000110', size: '1'})
+//     let kk = await client.modifyOrder({ order_id: '85f03e84-ccf3-4480-ba32-4db37279de11', trading_pair_id: 'EOS-ETH', price:'0.000110', size: '105'})
     
 //   } catch (e) {
 //     t.is(e.message, 'UNKNOWN_ORDER')
