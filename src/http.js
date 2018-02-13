@@ -228,17 +228,36 @@ export default opts => {
      * Trading [Auth]
      */
     myOrderId: payload => 
-      checkParams('myOrder', payload, ['order_id']) &&
+      checkParams('myOrderId', payload, ['order_id']) &&
       pCall('/v1/trading/orders/'+ payload.order_id)
       .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Order does not exist.')}),
 
     myOrderSymbol: payload => 
-      checkParams('myOrders', payload, ['trading_pair_id', 'limit']) &&
+      checkParams('myOrderSymbol', payload, ['trading_pair_id', 'limit']) &&
       pCall('/v1/trading/orders', payload),
 
     
     order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
     modifyOrder: payload => modifyOrder(pDCall, '/v1/trading/orders/', payload, 'PUT'),
     cancelOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'DELETE'),
+
+    // TODO: not working
+    // myOrderHistory: payload => 
+    // checkParams('myOrderHistory', payload, ['trading_pair_id', 'limit']) &&
+    // pCall('/v1/trading/order_history ', payload)
+    // .catch(err=>{if (err.message==="404 Not Found") throw new Error('Order does not exist.')}),
+
+    myTrade: payload => 
+    checkParams('myTrade', payload, ['trade_id']) &&
+    pCall('/v1/trading/trades/' + payload.trade_id)
+    .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Trade does not exist.')}),
+
+    myTradeHistory: payload => 
+    checkParams('myTradeHistory', payload, ['trading_pair_id']) &&
+    pCall('/v1/trading/trades/',  payload)
+
+
+    
+    
   }
 }
