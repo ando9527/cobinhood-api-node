@@ -8,7 +8,8 @@ const client = Cobinhood({
   apiSecret: process.env.COBINHOOD_API_SECRET,
 })
 // Done
-// test.serial('[REST] order & cancelOrder', async t => {
+// **size should be larger
+// test.serial('[REST] order & modifyOrder &cancelOrder', async t => {
 //   try{
 //     await client.order({
 //       trading_pair_id: 'ETHBTC',

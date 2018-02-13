@@ -143,19 +143,19 @@ const privateDataCall = ({ apiSecret }) => (
   )
 }
 
-export const candleFields = [
-  'openTime',
-  'open',
-  'high',
-  'low',
-  'close',
-  'volume',
-  'closeTime',
-  'quoteAssetVolume',
-  'trades',
-  'baseAssetVolume',
-  'quoteAssetVolume',
-]
+// export const candleFields = [
+//   'openTime',
+//   'open',
+//   'high',
+//   'low',
+//   'close',
+//   'volume',
+//   'closeTime',
+//   'quoteAssetVolume',
+//   'trades',
+//   'baseAssetVolume',
+//   'quoteAssetVolume',
+// ]
 
 /**
  * Get candles for a specific pair and interval and convert response
@@ -166,6 +166,31 @@ export const candleFields = [
 //   publicCall('/v1/klines', { interval: '5m', ...payload }).then(candles =>
 //     candles.map(candle => zip(candleFields, candle)),
 //   )
+const removeProperty = (obj, property) => {
+  return  Object.keys(obj).reduce((acc, key) => {
+    if (key !== property) {
+      return {...acc, [key]: obj[key]}
+    }
+    return acc;
+  }, {})
+}
+
+/**
+ * Create a new order books wrapper for market order simplicity
+ */
+const orderBooks = (pCall, url, payload = {}, method) => {
+  checkParams('orderBooks', payload, ['trading_pair_id'])
+  const newUrl = url + payload.trading_pair_id
+  const newPayload =  removeProperty(payload, 'trading_pair_id')
+
+  return (
+    // publicCall(newUrl, newPayload, method)
+    publicCall(newUrl, newPayload, method).then(({ success, result }) => ({
+      asks: result.orderbook.asks.map(a => zip(['price', 'count', 'size'], a)),
+      bids: result.orderbook.bids.map(b => zip(['price', 'count', 'size'], b)),
+  }))
+  )
+}
 
 /**
  * Create a new order wrapper for market order simplicity
@@ -181,14 +206,7 @@ const order = (pDCall, url, payload = {}, method) => {
   )
 }
 
-const removeProperty = (obj, property) => {
-  return  Object.keys(obj).reduce((acc, key) => {
-    if (key !== property) {
-      return {...acc, [key]: obj[key]}
-    }
-    return acc;
-  }, {})
-}
+
 
 const modifyOrder = (pDCall, url, payload = {}, method = 'PUT') => {
   checkParams('modifyOrder', payload, ['order_id', 'trading_pair_id', 'price', 'size'])
@@ -209,7 +227,7 @@ const book = payload =>
   publicCall('/v1/market/orderbooks/'+ payload.trading_pair_id).then(({ success, result }) => ({
     asks: result.orderbook.asks.map(a => zip(['price', 'quantity', 'count'], a)),
     bids: result.orderbook.bids.map(b => zip(['price', 'quantity', 'count'], b)),
-  }))
+}))
   
 // const aggTrades = payload =>
 //   checkParams('aggTrades', payload, ['symbol']) &&
@@ -232,10 +250,26 @@ export default opts => {
   // const kCall = keyCall(opts)
 
   return {
-    // ping: () => publicCall('/v1/ping').then(() => true),
-    time: () => publicCall('/v1/system/time').then(r => r.result.time),
-    exchangeInfo: () => publicCall('/v1/system/info'),
+    /**
+     * System Request
+     */
+    systemTime: () => publicCall('/v1/system/time').then(r => r.result.time),
+    systemInfo: () => publicCall('/v1/system/info'),
 
+    /**
+     * Market Request
+     */
+    allCurrencies: payload =>
+      publicCall('/v1/market/currencies'),
+
+    allTradingPairs: payload =>
+      publicCall('/v1/market/trading_pairs'),
+
+    orderBooks: payload => orderBooks(pCall, '/v1/market/orderbooks/', payload, 'GET'),
+
+    marketState: payload =>
+      publicCall('/v1/market/stats'),
+    
     book,
     // aggTrades,
     // candles,
