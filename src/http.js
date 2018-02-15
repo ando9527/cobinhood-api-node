@@ -187,7 +187,7 @@ const modifyOrder = (pDCall, url, payload = {}, method = 'PUT') => {
  */
 const book = payload =>
   checkParams('book', payload, ['trading_pair_id']) &&
-  publicCall('/v1/market/orderbooks/'+ payload.trading_pair_id).then(({ success, result }) => ({
+  publicCall(`/v1/market/orderbooks/${ payload.trading_pair_id}`).then(({ success, result }) => ({
     asks: result.orderbook.asks.map(a => zip(['price', 'quantity', 'count'], a)),
     bids: result.orderbook.bids.map(b => zip(['price', 'quantity', 'count'], b)),
 }))
@@ -220,7 +220,7 @@ export default opts => {
     
     ticker: payload =>
       checkParams('ticker', payload, ['trading_pair_id']) &&
-      publicCall('/v1/market/tickers/'+ payload.trading_pair_id),  
+      publicCall(`/v1/market/tickers/${ payload.trading_pair_id}`),  
 
     trades: payload => trades(publicCall, '/v1/market/orderbooks/', payload, 'GET'),
     
@@ -229,7 +229,7 @@ export default opts => {
      */
     myOrderId: payload => 
       checkParams('myOrderId', payload, ['order_id']) &&
-      pCall('/v1/trading/orders/'+ payload.order_id)
+      pCall(`/v1/trading/orders/${ payload.order_id}`)
       .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Order does not exist.')}),
 
     myOrderSymbol: payload => 
@@ -239,7 +239,7 @@ export default opts => {
     
     order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
     modifyOrder: payload => modifyOrder(pDCall, '/v1/trading/orders/', payload, 'PUT'),
-    cancelOrder: payload => pCall('/v1/trading/orders/'+payload.order_id, {}, 'DELETE'),
+    cancelOrder: payload => pCall(`/v1/trading/orders/${payload.order_id}`, {}, 'DELETE'),
 
     // TODO: not working
     // myOrderHistory: payload => 
@@ -249,7 +249,7 @@ export default opts => {
 
     myTrade: payload => 
     checkParams('myTrade', payload, ['trade_id']) &&
-    pCall('/v1/trading/trades/' + payload.trade_id)
+    pCall(`/v1/trading/trades/${  payload.trade_id}`)
     .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Trade does not exist.')}),
 
     myTradeHistory: payload => 
