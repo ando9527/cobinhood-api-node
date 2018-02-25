@@ -12,6 +12,8 @@ GET https://api.cobinhood.com/v1/market/trading_pairs HTTP/1.1
 ### orderbooks
 GET https://api.cobinhood.com/v1/chart/candles/COB-BTC?end_time=1517453108930&timeframe=1h HTTP/1.1
 ### candles
+GET https://api.cobinhood.com/v1/chart/candles/COB-BTC?timeframe=1m HTTP/1.1
+### candles
 GET https://api.binance.com/api/v1/klines?interval=5m&symbol=ETHBTC HTTP/1.1
 ### candles
 GET https://api.cobinhood.com/v1/chart/candles/INS-ETH HTTP/1.1

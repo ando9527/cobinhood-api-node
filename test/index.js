@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import Cobinhood from 'index'
 import { candleFields } from 'http'
 import { userEventHandler } from 'websocket'
-
+import moment from 'moment'
 import { checkFields } from './utils'
 
 dotenv.load()
@@ -79,4 +79,9 @@ test.serial('[REST][Market] Get Recent Trades', async t => {
 })
 
 
+test.serial('[REST][Chart] Get Candles', async t => {
+    const time = moment().subtract(1, 'minute').unix() 
+    const res = await client.candles({trading_pair_id:"EOS-ETH", timeframe:"1m", start_time:time})
+    checkFields(t, res, ['success', 'result'])
+})
 

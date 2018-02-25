@@ -1,6 +1,6 @@
 {
   "name": "cobinhood-api-node",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A node API wrapper for Cobinhood, inspired by binance-api-node",
   "main": "dist",
   "scripts": {
@@ -9,7 +9,8 @@
     "test": "ava",
     "cover": "nyc ava",
     "report": "npm run cover && nyc report --reporter=text-lcov | coveralls",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test_temp": "ava ./test/test_temp.js"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
@@ -29,6 +30,7 @@
     "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-zavatta": "^6.0.1",
+    "moment": "^2.20.1",
     "nyc": "^11.2.1",
     "prettier": "^1.7.4",
     "rimraf": "^2.6.2"

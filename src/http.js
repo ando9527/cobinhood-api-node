@@ -139,6 +139,19 @@ const trades = (publicCall, url, payload = {}, method) => {
 }
 
 /**
+ * Create a new trades wrapper for market order simplicity
+ */
+const candles = (publicCall, url, payload = {}, method) => {
+  checkParams('candles', payload, ['trading_pair_id', "timeframe"])
+  const newUrl = url + payload.trading_pair_id
+  const newPayload =  removeProperty(payload, 'trading_pair_id')
+
+  return (
+    publicCall(newUrl, newPayload, method)
+  )
+}
+
+/**
  * Create a new order books wrapper for market order simplicity
  */
 const orderBooks = (publicCall, url, payload = {}, method) => {
@@ -221,6 +234,8 @@ export default opts => {
     ticker: payload =>
       checkParams('ticker', payload, ['trading_pair_id']) &&
       publicCall(`/v1/market/tickers/${ payload.trading_pair_id}`),  
+
+    candles: payload => candles(publicCall, '/v1/chart/candles/', payload, 'GET'),
 
     trades: payload => trades(publicCall, '/v1/market/orderbooks/', payload, 'GET'),
     

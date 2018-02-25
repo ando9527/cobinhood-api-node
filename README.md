@@ -39,6 +39,7 @@ Following examples will use the `await` form, which requires some configuration 
     - [systemInfo](#systemInfo)
     - [allCurrencies](#allCurrencies)
     - [allTradingPairs](#allTradingPairs)
+    - [candles](#candles)
     - [orderBooks](#orderBooks)
     - [marketState](#marketState)
     - [ticker](#ticker)
@@ -117,6 +118,15 @@ console.log(await client.allCurrencies())
 
 </details>
 
+
+### candles
+|Param|Type|Required|Default|
+|--- |--- |--- |--- |
+|trading_pair_id|String|true|
+|timeframe|String|true|
+|start_time|int|false|0|
+|end_time|int|false|0 current server time|
+
 ### allTradingPairs
 
 Get All Trading Pairs
@@ -164,6 +174,10 @@ trading_pair_id
 trading_pair_id
   * enum[BTC-USDT, ...]
 
+
+trading_pair_id
+  * enum[BTC-USDT, ...]
+
 ### myOrderId
 |Param|Type|Required|Default|
 |--- |--- |--- |--- |
@@ -195,6 +209,7 @@ type
 |Param|Type|Required|Default|
 |--- |--- |--- |--- |
 |order_id|String|true|---|
+|trading_pair_id|String|true|---|
 |price|String|true|---|
 |size|String|true|---|
 
