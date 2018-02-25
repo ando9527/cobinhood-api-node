@@ -166,6 +166,20 @@ var _trades = function _trades(publicCall, url) {
 };
 
 /**
+ * Create a new trades wrapper for market order simplicity
+ */
+var _candles = function _candles(publicCall, url) {
+  var payload = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var method = arguments[3];
+
+  checkParams('candles', payload, ['trading_pair_id', "timeframe"]);
+  var newUrl = url + payload.trading_pair_id;
+  var newPayload = removeProperty(payload, 'trading_pair_id');
+
+  return publicCall(newUrl, newPayload, method);
+};
+
+/**
  * Create a new order books wrapper for market order simplicity
  */
 var _orderBooks = function _orderBooks(publicCall, url) {
@@ -277,6 +291,10 @@ exports.default = function (opts) {
 
     ticker: function ticker(payload) {
       return checkParams('ticker', payload, ['trading_pair_id']) && publicCall('/v1/market/tickers/' + payload.trading_pair_id);
+    },
+
+    candles: function candles(payload) {
+      return _candles(publicCall, '/v1/chart/candles/', payload, 'GET');
     },
 
     trades: function trades(payload) {
