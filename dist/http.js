@@ -311,7 +311,7 @@ exports.default = function (opts) {
     },
 
     myOrderSymbol: function myOrderSymbol(payload) {
-      return checkParams('myOrderSymbol', payload, ['trading_pair_id', 'limit']) && pCall('/v1/trading/orders', payload);
+      return pCall('/v1/trading/orders', payload);
     },
 
     order: function order(payload) {
