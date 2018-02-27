@@ -186,8 +186,8 @@ trading_pair_id
 ### myOrderSymbol
 |Param|Type|Required|Default|
 |--- |--- |--- |--- |
-|trading_pair_id|String|true|
-|limit|String|---|20|
+|trading_pair_id|String|false|
+|limit|String|---|20|false
 
 ### order
 |Param|Type|Required|Default|

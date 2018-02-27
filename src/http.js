@@ -248,7 +248,6 @@ export default opts => {
       .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Order does not exist.')}),
 
     myOrderSymbol: payload => 
-      checkParams('myOrderSymbol', payload, ['trading_pair_id', 'limit']) &&
       pCall('/v1/trading/orders', payload),
 
     
