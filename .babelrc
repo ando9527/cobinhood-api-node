@@ -4,13 +4,13 @@
       "env", {
         "targets": {
           "browsers": ["last 2 versions"],
-          "node": "current",
-        },
-      },
+          "node": "current"
+        }
+      }
     ],
-    "stage-0",
+    "stage-0"
   ],
   "plugins": [
-    ["module-resolver", { "root": ["src"] }],
+    ["module-resolver", { "root": ["src"] }]
   ]
 }
