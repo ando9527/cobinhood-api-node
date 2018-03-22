@@ -20,6 +20,8 @@ require('isomorphic-fetch');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var BASE = 'https://api.cobinhood.com';
@@ -232,15 +234,68 @@ var _modifyOrder = function _modifyOrder(pDCall, url) {
   return pDCall(newUrl, newPayload, method);
 };
 
+var _myOrderSymbol = function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pCall, url) {
+    var payload = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var method = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'GET';
+
+    var _data, success, result, orders, newOrders, newResult, response;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return pCall(url, payload, method);
+
+          case 3:
+            _data = _context.sent;
+            success = _data.success, result = _data.result;
+
+            if (!(success === false)) {
+              _context.next = 7;
+              break;
+            }
+
+            return _context.abrupt('return', _data);
+
+          case 7:
+            orders = result.orders;
+            newOrders = orders.map(function (o) {
+              return Object.assign(o, { trading_pair: o.trading_pair_id });
+            });
+            newResult = Object.assign(result, { orders: newOrders });
+            response = Object.assign(_data, { result: newResult });
+            return _context.abrupt('return', response);
+
+          case 14:
+            _context.prev = 14;
+            _context.t0 = _context['catch'](0);
+            return _context.abrupt('return', data);
+
+          case 17:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined, [[0, 14]]);
+  }));
+
+  return function _myOrderSymbol(_x14, _x15) {
+    return _ref6.apply(this, arguments);
+  };
+}();
+
 /**
  * Zip asks and bids reponse from order book
  * publicCall(,parames split)
  * TODO: ADD Query
  */
 var book = function book(payload) {
-  return checkParams('book', payload, ['trading_pair_id']) && publicCall('/v1/market/orderbooks/' + payload.trading_pair_id).then(function (_ref6) {
-    var success = _ref6.success,
-        result = _ref6.result;
+  return checkParams('book', payload, ['trading_pair_id']) && publicCall('/v1/market/orderbooks/' + payload.trading_pair_id).then(function (_ref7) {
+    var success = _ref7.success,
+        result = _ref7.result;
     return {
       asks: result.orderbook.asks.map(function (a) {
         return (0, _lodash2.default)(['price', 'quantity', 'count'], a);
@@ -310,8 +365,11 @@ exports.default = function (opts) {
       });
     },
 
+    // myOrderSymbol: payload => 
+    //   pCall('/v1/trading/orders', payload),
+
     myOrderSymbol: function myOrderSymbol(payload) {
-      return pCall('/v1/trading/orders', payload);
+      return _myOrderSymbol(pCall, '/v1/trading/orders/', payload, 'GET');
     },
 
     order: function order(payload) {
