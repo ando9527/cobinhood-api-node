@@ -193,6 +193,23 @@ const modifyOrder = (pDCall, url, payload = {}, method = 'PUT') => {
   )
 }
 
+const myOrderSymbol = async(pCall, url, payload = {}, method = 'GET') => {
+  try {
+    const data =await pCall(url, payload, method)
+    const {success, result} = data
+    if (success===false)return data
+    const {orders} = result
+    const newOrders = orders.map(o=>Object.assign(o,{trading_pair: o.trading_pair_id}))
+    const newResult = Object.assign(result, {orders:newOrders} )
+    const response = Object.assign(data, {result:newResult})
+    return response
+  } catch (error) {
+    return data
+  }
+    
+
+}
+
 /**
  * Zip asks and bids reponse from order book
  * publicCall(,parames split)
@@ -247,9 +264,10 @@ export default opts => {
       pCall(`/v1/trading/orders/${ payload.order_id}`)
       .catch(err=>{if (err.message==="400 Bad Request") throw new Error('Order does not exist.')}),
 
-    myOrderSymbol: payload => 
-      pCall('/v1/trading/orders', payload),
+    // myOrderSymbol: payload => 
+    //   pCall('/v1/trading/orders', payload),
 
+    myOrderSymbol: payload => myOrderSymbol(pCall, '/v1/trading/orders/', payload, 'GET'),
     
     order: payload => order(pDCall, '/v1/trading/orders', payload, 'POST'),
     modifyOrder: payload => modifyOrder(pDCall, '/v1/trading/orders/', payload, 'PUT'),
