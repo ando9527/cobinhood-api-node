@@ -238,9 +238,7 @@ var _myOrderSymbol = function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pCall, url) {
     var payload = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var method = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'GET';
-
-    var _data, success, result, orders, newOrders, newResult, response;
-
+    var data, success, result, orders, newOrders, newResult, response;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -250,15 +248,15 @@ var _myOrderSymbol = function () {
             return pCall(url, payload, method);
 
           case 3:
-            _data = _context.sent;
-            success = _data.success, result = _data.result;
+            data = _context.sent;
+            success = data.success, result = data.result;
 
             if (!(success === false)) {
               _context.next = 7;
               break;
             }
 
-            return _context.abrupt('return', _data);
+            return _context.abrupt('return', data);
 
           case 7:
             orders = result.orders;
@@ -266,13 +264,13 @@ var _myOrderSymbol = function () {
               return Object.assign(o, { trading_pair: o.trading_pair_id });
             });
             newResult = Object.assign(result, { orders: newOrders });
-            response = Object.assign(_data, { result: newResult });
+            response = Object.assign(data, { result: newResult });
             return _context.abrupt('return', response);
 
           case 14:
             _context.prev = 14;
             _context.t0 = _context['catch'](0);
-            return _context.abrupt('return', data);
+            throw _context.t0;
 
           case 17:
           case 'end':

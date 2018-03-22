@@ -204,7 +204,7 @@ const myOrderSymbol = async(pCall, url, payload = {}, method = 'GET') => {
     const response = Object.assign(data, {result:newResult})
     return response
   } catch (error) {
-    return data
+    throw error
   }
     
 
