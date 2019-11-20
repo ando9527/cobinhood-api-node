@@ -1,4 +1,4 @@
-# binance-api-node 
+# cobinhood-api-node 
 
 ### Installation
 
